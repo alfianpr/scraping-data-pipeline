@@ -58,29 +58,9 @@ SCHEMA = {
     "timestamp":"datetime64[ns]"
 }
 
-SCHEMA_DCC = {
-    "id":"object",
-    "name":"object",
-    "sku_id":"object",
-    "images_large_urls" : "object",
-    "picture_count" : "Int64",
-    "description" : "object",
-    "rating_average_rate" : "float64",
-    "rating_user_count" : "Int64",
-    "specs_brand" : "object",
-    "rating_has_picture" : "Int64",
-    "rating_has_description" : "Int64",
-    "store_id" : "object",
-    "store_name" : "object",
-    "store_url" : "object",
-    "url" : "object",
-    "timestamp":"datetime64[ns]"
-}
-
 ADD_COL_TYPE = {
     'datetime': ['timestamp','created_at','deal_applied_date','deal_expired_date'],
     'bool_str': ['merchant_return_insurance', 'rush_delivery', 'store_brand_seller', 'store_premium_top_seller', 'warranty_cheapest'],
-    #'bool_int': ['item_cod_flag']
 }
 
 def get_token():
