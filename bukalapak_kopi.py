@@ -9,10 +9,11 @@ from bukalapaklib import get_scrape, get_token
 
 params = {
     "prambanan_override" : "true",
-    "category_id" : 2308,
+    "category_id" : 3263,
     "sort" : "bestselling",
     "limit" : 30,
     "facet" : "true",
     # "brand": "true"
 }
-get_scrape(params, get_token)
+df_scraper = get_scrape(params, get_token)
+print(df_scraper)

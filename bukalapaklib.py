@@ -64,20 +64,20 @@ ADD_COL_TYPE = {
 }
 
 def get_token():
-    re = requests.get("https://bukalapak.com",
+    res = requests.get("https://bukalapak.com",
                        headers={
                            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:79.0) Gecko/20100101 Firefox/79.0",
                        })
-    return re.search("\"access_token\":\"(.*?)\"",re.text).group()[16:-1] # looking for token access
+    return re.search("\"access_token\":\"(.*?)\"",res.text).group()[16:-1] # looking for token access
 
-def get_scrape (params, get_token, page = 50, URL = "https://api.bukalapak.com/multistrategy-products"):
+def get_scrape (params, get_token, page = 10, URL = "https://api.bukalapak.com/multistrategy-products"):
     DF = []
     index = 1
     while index <= page:
         payload = {
             "offset" : ((index-1)*30),
             "page" : index,
-            "access_token" : get_token,
+            "access_token" : get_token(),
             **params
         }
 
@@ -89,4 +89,14 @@ def get_scrape (params, get_token, page = 50, URL = "https://api.bukalapak.com/m
         sleep_time = random.randint(10, 50)
         time.sleep(sleep_time / 1000)
 
-        return print (scrape.status_code)
+        if scrape.status_code == 200:
+            json_file = scrape.json()
+            df_1 = pd.json_normalize(json_file)
+            df_2 = json.loads(pd.Series.to_json(df_1["data"]))
+            df_3 = pd.json_normalize(df_2, record_path="0")
+            DF.append(df_3)
+        if scrape.status_code != 200:
+            raise ValueError("Error returned: {}".format(res.status_code))
+        index = index+1
+    df_scraper = pd.concat(DF, ignore_index=True)
+    return df_scraper
