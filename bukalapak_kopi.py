@@ -1,11 +1,7 @@
-import json
-import pandas as pd
-import random
-import re
-import requests
-import time
-import numpy as np
-from bukalapaklib import get_scrape, get_token
+from bukalapaklib import get_scrape, get_token, clean_df
+from datetime import date
+
+timestr = date.today()
 
 params = {
     "prambanan_override" : "true",
@@ -16,4 +12,6 @@ params = {
     # "brand": "true"
 }
 df_scraper = get_scrape(params, get_token)
-print(df_scraper)
+df_file = clean_df(df_scraper,timestr)
+
+df_file.to_csv('kopi_1.csv')

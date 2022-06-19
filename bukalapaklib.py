@@ -5,6 +5,8 @@ import re
 import requests
 import time
 import numpy as np
+import logging
+from datetime import date
 
 SCHEMA = {
     "condition":"object",
@@ -100,3 +102,29 @@ def get_scrape (params, get_token, page = 10, URL = "https://api.bukalapak.com/m
         index = index+1
     df_scraper = pd.concat(DF, ignore_index=True)
     return df_scraper
+
+
+def clean_df (df_scraper, timestr, SCHEMA = SCHEMA, ADD_COL_TYPE = ADD_COL_TYPE):
+    df_scraper.columns = [col.replace(' ', '_').replace('.', '_') for col in df_scraper.columns]
+    df_scraper['timestamp'] = pd.to_datetime(timestr,format='%Y-%m-%d')
+
+    df_scraper_clean = pd.DataFrame()
+    delete = []
+    for col in SCHEMA:
+        try:
+            df_scraper_clean[col] = df_scraper[col]
+        except:
+            logging.warning("no column %s", col)
+            delete.append(col)
+    if delete:
+        for col in delete:
+            SCHEMA = {key:val for key, val in SCHEMA.items() if key != col}
+
+    for col in ADD_COL_TYPE['bool_str']:
+        df_scraper_clean[col] = df_scraper_clean[col].astype('bool')
+
+    for col in ADD_COL_TYPE['datetime']:
+        df_scraper_clean[col] = pd.to_datetime(df_scraper_clean[col], format="%Y-%m-%dT%H:%M:%SZ")
+
+    df_scraper_clean = df_scraper_clean.astype(SCHEMA).reset_index(drop=True)
+    return df_scraper_clean
