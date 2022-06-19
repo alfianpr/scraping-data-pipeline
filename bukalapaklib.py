@@ -77,6 +77,16 @@ def get_scrape (params, get_token, page = 50, URL = "https://api.bukalapak.com/m
         payload = {
             "offset" : ((index-1)*30),
             "page" : index,
-            "access_token" : access_token,
+            "access_token" : get_token,
             **params
         }
+
+        headers = {
+                "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:79.0) Gecko/20100101 Firefox/79.0",
+            }
+    
+        scrape = requests.get (URL, params = payload, headers=headers)
+        sleep_time = random.randint(10, 50)
+        time.sleep(sleep_time / 1000)
+
+        return print (scrape.status_code)
