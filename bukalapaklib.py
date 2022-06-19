@@ -64,4 +64,19 @@ ADD_COL_TYPE = {
 }
 
 def get_token():
-    return
+    re = requests.get("https://bukalapak.com",
+                       headers={
+                           "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:79.0) Gecko/20100101 Firefox/79.0",
+                       })
+    return re.search("\"access_token\":\"(.*?)\"",re.text).group()[16:-1] # looking for token access
+
+def get_scrape (params, get_token, page = 50, URL = "https://api.bukalapak.com/multistrategy-products"):
+    DF = []
+    index = 1
+    while index <= page:
+        payload = {
+            "offset" : ((index-1)*30),
+            "page" : index,
+            "access_token" : access_token,
+            **params
+        }
