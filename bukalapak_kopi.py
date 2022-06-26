@@ -13,10 +13,10 @@ df_to_ps = FunctionTask(df_to_ps)
 def get_today():
     return prefect.context.today
 
-PAGE = 5
+PAGE = 200
 CATEGORY_ID = 3263
 TABLE_NAME = "buka_kopi"
-DATABASE = "Sandbox"
+DATABASE = "Boerhand"
 
 params = {
     "prambanan_override" : "true",
