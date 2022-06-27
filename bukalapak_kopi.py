@@ -9,9 +9,9 @@ get_scrape = FunctionTask(get_scrape)
 clean_df = FunctionTask(clean_df)
 df_to_ps = FunctionTask(df_to_ps)
 
-@task
-def get_today():
-    return prefect.context.today
+#@task
+#def get_today():
+    #return prefect.context.today
 
 PAGE = 200
 CATEGORY_ID = 3263
@@ -36,7 +36,7 @@ credential = {
 }
 
 with Flow(TABLE_NAME) as flow:
-    timestr = get_today()
+    timestr = date.today()
     df_scraper = get_scrape(params, get_token, page=PAGE)
     df_file = clean_df(df_scraper,timestr)
     upload = df_to_ps(df_file, table_name=TABLE_NAME, credential=credential)
