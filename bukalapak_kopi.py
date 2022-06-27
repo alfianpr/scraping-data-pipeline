@@ -16,7 +16,7 @@ def get_today():
 PAGE = 200
 CATEGORY_ID = 3263
 TABLE_NAME = "buka_kopi"
-DATABASE = "Boerhand"
+DATABASE = "boerhand"
 
 params = {
     "prambanan_override" : "true",
@@ -41,5 +41,5 @@ with Flow(TABLE_NAME) as flow:
     df_file = clean_df(df_scraper,timestr)
     upload = df_to_ps(df_file, table_name=TABLE_NAME, credential=credential)
 
-#flow.run()
-flow.register(project_name="bukalapak")
+flow.run()
+#flow.register(project_name="bukalapak")
